@@ -1,24 +1,58 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
+    <span id="honey-counter">0</span> 🍯<br/>
+    <span id="worker-counter">0</span> 🐝<br/>
+    <span id="flower-counter">0</span> 🌺<br/>
+
+    <button id="add-honey-button">Harvest honey 🍯</button><br/>
+    <button id="add-worker-button">
+      $<span id="worker-price">10</span>
+      Buy worker bee 🐝
+    </button><br/>
+    <button id="add-flower-button">
+      $<span id="flower-price">100</span>
+      Plant flower 🌺
+    </button><br/>
   </div>
 `
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const state = {
+  honey: 0,
+  worker: 0,
+  flowers: 0,
+}
+
+const honeyCounterElement = document.querySelector("#honey-counter") as HTMLElement
+const workerCounterElement = document.querySelector("#worker-counter") as HTMLElement
+const workerPriceElement = document.querySelector("#worker-price") as HTMLElement
+
+const addHoneyButton = document.querySelector("#add-honey-button")
+const addWorkerButton = document.querySelector("#add-worker-button")
+
+function addHoneyEventListener() {
+  honeyCounterElement.innerText = (state.honey += 1).toString()
+}
+
+if (addHoneyButton)
+  addHoneyButton.addEventListener("click", addHoneyEventListener)
+
+function addWorkerEventListener() {
+  if (state.honey < 10 + state.worker ** 2) return
+
+  honeyCounterElement.innerText = (state.honey -= (10 + state.worker ** 2)).toString()
+
+  workerCounterElement.innerText = (state.worker += 1).toString()
+  workerPriceElement.innerText = (10 + state.worker ** 2).toString()
+}
+
+if (addWorkerButton)
+  addWorkerButton.addEventListener("click", addWorkerEventListener)
+
+setInterval(() => {
+  state.honey += 1 * state.worker
+
+  honeyCounterElement.innerText = state.honey.toString()
+  console.log(state)
+}, 1000)
