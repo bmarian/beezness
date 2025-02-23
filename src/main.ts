@@ -1,31 +1,37 @@
-import './style.css'
-
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <span id="honey-counter">0</span> 🍯<br/>
-    <span id="worker-counter">0</span> 🐝<br/>
-    <span id="flower-counter">0</span> 🌺<br/>
-
-    <button id="add-honey-button">
-      <span id="honey-value">1</span>
-      Harvest honey 🍯
-    </button><br/>
-    <button id="add-worker-button">
-      $<span id="worker-price">10</span>
-      Buy worker bee 🐝
-    </button><br/>
-    <button id="add-flower-button">
-      $<span id="flower-price">100</span>
-      Plant flower 🌺
-    </button><br/>
-  </div>
-`
+const numberFormater = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 0,
+})
 
 const state = {
-  honey: 111,
+  honey: 0,
   worker: 0,
-  flowers: 0,
+  flowers: 5,
+  prices: {
+    honey: 0,
+    worker: 0,
+    flowers: 0,
+  },
+  setHoneyValue() {
+    const newValue = 1 + state.worker * state.flowers
+    this.prices.honey = newValue
+  },
+  setWorkerPrice() {
+    const newPrice = 10 + ~~(0.1 * this.worker ** 2 + this.worker)
+    this.prices.worker = newPrice
+  },
+  setFlowersPrice() {
+    const newPrice = 100 + ~~(Math.exp(this.flowers) + this.flowers)
+    this.prices.flowers = newPrice
+  }
 }
+
+function init() {
+  state.setHoneyValue()
+  state.setWorkerPrice()
+  state.setFlowersPrice()
+}
+
+init()
 
 const honeyCounterElement = document.querySelector("#honey-counter") as HTMLElement
 const workerCounterElement = document.querySelector("#worker-counter") as HTMLElement
@@ -39,44 +45,60 @@ const addHoneyButton = document.querySelector("#add-honey-button")
 const addWorkerButton = document.querySelector("#add-worker-button")
 const addFlowerButton = document.querySelector("#add-flower-button")
 
-function addHoneyEventListener() {
-  state.honey += 1 + state.worker * state.flowers
-}
-
-function addWorkerEventListener() {
-  if (state.honey < 10 + state.worker ** 2) return
-
-  state.honey -= (10 + state.worker ** 2)
-  state.worker += 1
-}
-
-function addFlowerEventListener() {
-  if (state.honey < 100 + state.flowers ** 2) return
-
-  state.honey -= (100 + state.flowers ** 2)
-  state.flowers += 1
-}
-
 addHoneyButton?.addEventListener("click", addHoneyEventListener)
 addWorkerButton?.addEventListener("click", addWorkerEventListener)
 addFlowerButton?.addEventListener("click", addFlowerEventListener)
 
+function addHoneyEventListener() {
+  state.honey += state.prices.honey
+}
+
+function addWorkerEventListener() {
+  if (state.honey < state.prices.worker) return
+
+  state.honey -= state.prices.worker
+  state.worker += 1
+
+  state.setWorkerPrice()
+  state.setHoneyValue()
+}
+
+function addFlowerEventListener() {
+  if (state.honey < state.prices.flowers) return
+
+  state.honey -= state.prices.flowers
+  state.flowers += 1
+
+  state.setFlowersPrice()
+  state.setHoneyValue()
+}
+
 function gameLogic() {
   state.honey += Math.max(state.worker * state.flowers, state.worker)
 
-  honeyCounterElement.innerText = state.honey.toString()
-  console.log(state)
+  drawTextInElement(honeyCounterElement, scientificFormat(state.honey))
+  // console.log(state)
+}
+
+function drawTextInElement(htmlElement: HTMLElement, text: string) {
+  if (htmlElement.innerText === text) return
+  htmlElement.innerText = text
+}
+
+function scientificFormat(value: number): string {
+  if (value < 1000000) return numberFormater.format(value)
+  return value.toExponential(2)
 }
 
 function draw() {
-  honeyCounterElement.innerText = state.honey.toString()
-  honeyValueElement.innerText = (1 + state.worker * state.flowers).toString()
+  drawTextInElement(honeyCounterElement, scientificFormat(state.honey))
+  drawTextInElement(honeyValueElement, scientificFormat(state.prices.honey))
 
-  workerCounterElement.innerText = state.worker.toString()
-  workerPriceElement.innerText = (10 + state.worker ** 2).toString()
+  drawTextInElement(workerCounterElement, scientificFormat(state.worker))
+  drawTextInElement(workerPriceElement, scientificFormat(state.prices.worker))
 
-  flowerCounterElement.innerText = state.flowers.toString()
-  flowerPriceElement.innerText = (100 + state.flowers ** 2).toString()
+  drawTextInElement(flowerCounterElement, scientificFormat(state.flowers))
+  drawTextInElement(flowerPriceElement, scientificFormat(state.prices.flowers))
 }
 
 let delta: number, oldTimeStamp: number, timePassed: number = 0
