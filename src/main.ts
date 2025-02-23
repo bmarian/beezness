@@ -2,35 +2,48 @@ const numberFormater = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 })
 
-const state = {
+let state = {
   honey: 0,
   worker: 0,
-  flowers: 5,
+  flowers: 0,
   prices: {
     honey: 0,
     worker: 0,
     flowers: 0,
   },
-  setHoneyValue() {
-    const newValue = 1 + state.worker * state.flowers
-    this.prices.honey = newValue
-  },
-  setWorkerPrice() {
-    const newPrice = 10 + ~~(0.1 * this.worker ** 2 + this.worker)
-    this.prices.worker = newPrice
-  },
-  setFlowersPrice() {
-    const newPrice = 100 + ~~(Math.exp(this.flowers) + this.flowers)
-    this.prices.flowers = newPrice
+}
+
+function setHoneyValue() {
+  const newValue = 1 + state.worker * state.flowers
+  state.prices.honey = newValue
+}
+function setWorkerPrice() {
+  const newPrice = 10 + ~~(0.1 * state.worker ** 2 + state.worker)
+  state.prices.worker = newPrice
+}
+function setFlowersPrice() {
+  const newPrice = 100 + ~~(Math.exp(state.flowers) + state.flowers)
+  state.prices.flowers = newPrice
+}
+
+function loadStateFromStorage() {
+  const storageState = localStorage.getItem('state')
+
+  if (storageState) {
+    state = JSON.parse(storageState)
   }
 }
 
-function init() {
-  state.setHoneyValue()
-  state.setWorkerPrice()
-  state.setFlowersPrice()
+function saveStateToStorage() {
+  localStorage.setItem('state', JSON.stringify(state))
 }
 
+function init() {
+  loadStateFromStorage()
+  setHoneyValue()
+  setWorkerPrice()
+  setFlowersPrice()
+}
 init()
 
 const honeyCounterElement = document.querySelector("#honey-counter") as HTMLElement
@@ -59,8 +72,8 @@ function addWorkerEventListener() {
   state.honey -= state.prices.worker
   state.worker += 1
 
-  state.setWorkerPrice()
-  state.setHoneyValue()
+  setWorkerPrice()
+  setHoneyValue()
 }
 
 function addFlowerEventListener() {
@@ -69,15 +82,16 @@ function addFlowerEventListener() {
   state.honey -= state.prices.flowers
   state.flowers += 1
 
-  state.setFlowersPrice()
-  state.setHoneyValue()
+  setFlowersPrice()
+  setHoneyValue()
 }
 
 function gameLogic() {
   state.honey += Math.max(state.worker * state.flowers, state.worker)
-
   drawTextInElement(honeyCounterElement, scientificFormat(state.honey))
   // console.log(state)
+
+  saveStateToStorage()
 }
 
 function drawTextInElement(htmlElement: HTMLElement, text: string) {
