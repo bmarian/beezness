@@ -46,6 +46,7 @@ function init() {
 }
 init()
 
+const honeyPerSecElement = document.querySelector("#honey-per-sec") as HTMLElement
 const honeyCounterElement = document.querySelector("#honey-counter") as HTMLElement
 const workerCounterElement = document.querySelector("#worker-counter") as HTMLElement
 const flowerCounterElement = document.querySelector("#flower-counter") as HTMLElement
@@ -113,6 +114,8 @@ function draw() {
 
   drawTextInElement(flowerCounterElement, scientificFormat(state.flowers))
   drawTextInElement(flowerPriceElement, scientificFormat(state.prices.flowers))
+
+  drawTextInElement(honeyPerSecElement, scientificFormat(state.prices.honey))
 }
 
 let delta: number, oldTimeStamp: number, timePassed: number = 0
