@@ -1,35 +1,58 @@
-@import './base.css';
+@import "./colors.css";
+@import "./base.css";
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+body {
+  background-color: var(--soft-cream);
+  background-image:  
+    radial-gradient(circle, rgba(255, 215, 125, 0.3) 20%, transparent 20%),
+    radial-gradient(circle, rgba(255, 215, 125, 0.3) 20%, transparent 20%);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
 }
 
-a,
-.green {
+button {
+  background: var(--honey-gold);
+  color: var(--text-dark);
+  border: 2px solid var(--border-gold);
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: var(--amber-orange);
+  transform: translateY(-2px);
+}
+
+input, textarea {
+  background: #FFFDF6;
+  border: 1px solid var(--border-gold);
+  color: var(--text-dark);
+  padding: 10px;
+  border-radius: 6px;
+}
+
+a {
+  color: var(--amber-orange);
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+  font-weight: bold;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+a:hover {
+  color: var(--honey-gold);
+  text-decoration: underline;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.card {
+  background: #FFF2D9;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid var(--border-gold);
+  box-shadow: 0px 4px 8px rgba(255, 199, 95, 0.3);
 }
+
+
