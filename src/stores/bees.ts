@@ -4,9 +4,9 @@ import { defineStore } from 'pinia'
 
 export const useBeesStore = defineStore('bees', () => {
   const honey = ref(0)
-  const droneCount = ref(0)
-  const workerCount = ref(0)
-  const queenCount = ref(0)
+  const droneCount = ref(1568978999544655)
+  const workerCount = ref(15489456)
+  const queenCount = ref(1000156484)
 
   const dronePrice = computed(() => 10 + 2 * droneCount.value + 0.5 * droneCount.value ** 2)
   const workerPrice = computed(() => 500 + 5 * workerCount.value + 1.2 * workerCount.value ** 2)
