@@ -5,16 +5,19 @@ import { computed } from 'vue';
 interface Props {
   label: string,
   count: number,
-  price: number,
-  progressTimer?: number,
+  money?: number,
+  price?: number,
+  productionSpeed?: number,
+  incrementAmount: number,
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  progressTimer: 1000,
+  productionSpeed: 0,
+  price: 0,
 })
 
 const scientificAmount = computed(() => {
-  if (props.price < 1000000) return { value: props.price, scientificAmount: "" }
+  if (props.price < 1000000) return { value: scientificFormat(props.price), scientificAmount: "" }
   const [value, scientificAmount] = scientificFormat(props.price).split("e")
   return { value, scientificAmount: `e${scientificAmount}` }
 })
@@ -29,22 +32,25 @@ const scientificAmount = computed(() => {
     </div>
     <div class="button">
       <div class="automation">
-        <div class="automatin-ammount">{{ props.label }}</div>
+        <div class="automation-label">{{ props.label }}</div>
+        <div v-if="productionSpeed" class="automation-amount">{{ scientificFormat(props.productionSpeed) }} / s</div>
       </div>
-      <div class="buy-button">
+      <div class="buy-button" :class="{ disabled: typeof props.money !== 'undefined' && props.money < props.price }"
+        @click="$emit('buy')">
         <div class="number-of-items">
           <span class="buy">Buy</span>
           <div class="amount-container">
-            <span class="x">x</span>
-            <span class="amount">1</span>
+            <span class="x">x </span>
+            <span class="amount">{{ props.incrementAmount !== Infinity ? props.incrementAmount : 'Max' }}</span>
           </div>
         </div>
-        <div class="price">
+        <div v-if="props.price" class="price">
           <div class="amount-container">
             <span class="dollar-sign">$</span>
             <span class="amount">{{ scientificAmount.value }}</span>
           </div>
-          <span class="scientific-amount">{{ scientificAmount.scientificAmount }}</span>
+          <span v-if="scientificAmount.scientificAmount" class="scientific-amount">{{ scientificAmount.scientificAmount
+            }}</span>
         </div>
       </div>
     </div>
@@ -64,11 +70,13 @@ const scientificAmount = computed(() => {
 
 <style scoped>
 .progress-button {
-  position: relative;
   display: flex;
 
-  width: 90%;
   margin: 0 1rem 1rem 1rem;
+}
+
+.avatar {
+  position: relative;
 }
 
 .button {
@@ -94,9 +102,20 @@ const scientificAmount = computed(() => {
   border-radius: 0.5rem;
   background-color: var(--amber-orange);
   color: var(--soft-cream);
+
+  font-weight: bold;
+}
+
+.automation .automation-label {
+  margin-left: 0.5rem;
+}
+
+.automation .automation-amount {
+  margin-right: 0.5rem;
 }
 
 .buy-button {
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,6 +129,16 @@ const scientificAmount = computed(() => {
   color: var(--text-dark);
 }
 
+.buy-button.disabled {
+  cursor: default;
+  background-color: #b7b7b7;
+  color: var(--soft-cream);
+}
+
+.buy-button:not(.disabled):hover {
+  border: 3px solid black;
+}
+
 .buy-button .number-of-items {
   height: 100%;
   margin: 0.2rem 0.5rem;
@@ -119,6 +148,10 @@ const scientificAmount = computed(() => {
   justify-content: center;
 
   font-weight: bold;
+}
+
+.buy-button .number-of-items .amount-container {
+  font-style: italic;
 }
 
 .buy-button .price {
@@ -157,4 +190,3 @@ const scientificAmount = computed(() => {
   text-align: center;
 }
 </style>
-

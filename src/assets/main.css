@@ -1,6 +1,10 @@
 @import "./colors.css";
 @import "./base.css";
 
+* { 
+  user-select: none;
+}
+
 body {
   background-color: var(--soft-cream);
   background-image:  
