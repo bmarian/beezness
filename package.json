@@ -6,17 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
-    "lint:eslint": "eslint . --fix",
-    "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "pinia": "^3.0.1",
-    "vite-plugin-singlefile": "^2.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
@@ -30,6 +25,7 @@
     "eslint": "^9.20.1",
     "eslint-plugin-oxlint": "^0.15.10",
     "eslint-plugin-vue": "^9.32.0",
+    "gh-pages": "^6.3.0",
     "jiti": "^2.4.2",
     "npm-run-all2": "^7.0.2",
     "oxlint": "^0.15.10",
