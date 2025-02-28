@@ -16,6 +16,19 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+main{
+  height: 100%;
+  overflow: auto;
+}
+
+footer {
+  width: 100vw;
+  height: 5rem;
+
+  border-top: 3px solid var(--border-gold);
+  overflow: hidden;
+} 
+
 button {
   background: var(--honey-gold);
   color: var(--text-dark);

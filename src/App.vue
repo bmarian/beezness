@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { useBeesStore } from './stores/bees';
 import { storeToRefs } from 'pinia';
+import ProfileMenuComponent from './components/ProfileMenuComponent.vue';
 
 const beesStore = useBeesStore()
 const {
@@ -23,16 +24,12 @@ setInterval(() => {
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <!-- <RouterLink to="/">Home</RouterLink> -->
-        <!-- <RouterLink to="/about">About</RouterLink> -->
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
+  <footer>
+    <ProfileMenuComponent />
+  </footer>
 </template>
 
 <style scoped>
