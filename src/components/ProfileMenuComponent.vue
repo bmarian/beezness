@@ -43,13 +43,17 @@ const changeIncrementAmount = () => {
 
 <style>
 .footer {
-  height: 100%;
-  width: 100%;
   background-color: var(--honeycomb-yellow);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  width: 100vw;
+  height: 5rem;
+
+  border-top: 3px solid var(--border-gold);
+  overflow: hidden;
 }
 
 .profile-picture {

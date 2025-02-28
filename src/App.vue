@@ -27,9 +27,7 @@ setInterval(() => {
   <main>
     <RouterView />
   </main>
-  <footer>
-    <ProfileMenuComponent />
-  </footer>
+  <ProfileMenuComponent />
 </template>
 
 <style scoped>
